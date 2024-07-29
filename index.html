@@ -2,10 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>word relay</title>
+    <title>Word Relay</title>
 </head>
 <body>
-    
+    <div><span id='order'>1</span> 번째 참가자</div>
+    <div><span id='word'></span></div>
+    <input type="text">
+    <button>입력</button>
+
+    <script>
+        // 참가자 수를 사용자에게 입력받아 저장
+        const number = Number(prompt('참가자는 몇 명인가요?'));
+
+        // DOM 요소를 변수에 저장
+        const $input = document.querySelector('input');
+        const $button = document.querySelector('button');
+        const $word = document.querySelector('#word');
+        const $order = document.querySelector('#order');
+
+        // 새로운 단어와 현재 단어를 저장할 변수
+        let newWord;
+        let word;
+
+        // 입력 필드의 값이 변경될 때 호출되는 함수
+        const onInput = (event) => {
+            newWord = event.target.value;  // 입력된 값을 newWord에 저장
+        };
+
+        // 버튼이 클릭될 때 호출되는 함수
+        const onClickButton = () => {
+            // 첫 번째 단어 입력이거나 이전 단어의 마지막 글자와 새로운 단어의 첫 글자가 일치할 경우
+            if (!word || word.at(-1) === newWord[0]) {
+                word = newWord;  // 새로운 단어를 현재 단어로 업데이트
+                $word.textContent = word;  // 화면에 단어 표시
+
+                // 참가자 순서 업데이트
+                const order = Number($order.textContent);
+                if (order + 1 > number) {
+                    $order.textContent = 1;  // 마지막 참가자라면 다시 첫 번째 참가자로
+                } else {
+                    $order.textContent = order + 1;  // 다음 참가자로 순서 변경
+                }
+            } else {
+                // 단어가 틀렸을 경우 경고 메시지 표시
+                alert('틀린 단어 입니다.');
+            }
+            $input.value = '';  // 입력 필드 초기화
+            $input.focus();  // 입력 필드에 포커스
+        };
+
+        // 이벤트 리스너 추가
+        $input.addEventListener('input', onInput);  // 입력 필드 값이 변경될 때 onInput 함수 호출
+        $button.addEventListener('click', onClickButton);  // 버튼이 클릭될 때 onClickButton 함수 호출
+    </script>
 </body>
 </html>
